@@ -22,46 +22,92 @@ WHITE='\033[1;37m'
 NOCOLOR='\033[0m'
 
 # Check if Tool, Package is available
+check_cask() {
+  if brew ls --versions brew-cask-completion > /dev/null; then
+    # cask is installed then try to upgrade
+    brew upgrade brew-cask-completion
+  else
+    # cask is not installed try to install
+    brew tap caskroom/cask
+    brew install brew-cask-completion
+  fi
+}
+check_java() {
+  if java -version > /dev/null; then
+    # Java is installed
+    brew upgrade brew-cask-completion
+  else
+    # Java is not installed try to install
+      brew cask install java
+  fi
+}
 
 check_homebrew() {
   echo -e "Checking for ${BROWN}homebrew${NOCOLOR}"
   if brew -v > /dev/null; then
     # homebrew is installed
-    check_homebrew_update
+    homebrew_update
 
   else
     # homebrew is not installed
-    echo Couldn\'t find homebrew. Downloading the package...
-
+    homebrew_install
   fi
+  homebrew_runtimes
+  homebrew_libraries
+  check_node
 }
 
-check_homebrew_update() {
+homebrew_install() {
+    echo -e "Installing ${BROWN}homebrew${NOCOLOR}"
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+}
+
+homebrew_update() {
   echo -e "${BLUE}Updating${NOCOLOR} ${BROWN}homebrew${NOCOLOR}..."
   brew update
-  brew upgrade  
+  check_cask
+  brew upgrade
+  brew cleanup
+  brew cask cleanup  
 }
 
-check_ruby() {
-  echo -e "Checking for ${RED}ruby${NOCOLOR}"
-  if ruby -v > /dev/null; then
-    # ruby is installed
-    
-
+check_node() {
+  echo -e "Checking for ${LIGHT_GREEN}NodeJS${NOCOLOR}"
+  if ! node -v > /dev/null; then
+    # Node is installed
+    brew upgrade node
   else
-    # ruby is not installed
-    echo Couldn\'t find homebrew. Downloading the package...
+    # Node is not installed
+    echo -e "Installing ${LIGHT_GREEN}homebrew${NOCOLOR}..."
 
+    brew install node
   fi
-}
-check_ruby_update() {
-
+  node_modules
 }
 
-check_oh_my_zsh() {
-  echo -e "checking for Oh My ZSH"
+node_modules() {
+  npm i -g npm
+  npm install -g begoo
+  begoo "Installing Live-Server, Cordova, Yeoman "
+  npm install -g live-server
+  npm install -g cordova
+  npm install -g yo
 
 }
 
-check_ruby
-#check_homebrew
+homebrew_libraries() {
+  brew install imagemagick
+}
+# runtimes and package managers
+homebrew_runtimes() {
+  brew update
+  check_java
+  brew install node
+  brew install yarn
+  brew install watchman
+  brew install mongodb
+  brew install rbenv
+  rbenv init
+}
+
+check_homebrew
