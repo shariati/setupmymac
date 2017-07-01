@@ -42,7 +42,7 @@ Tools, Package managers, and configuration:
 * [Yeoman] Scaffolding tool for modern webapps
 * [Live-Server] Little development server with live reload capability
 * [Begoo] Something with style in terminal
-
+* [Webpack] Bundle your assets, scripts, images
 
 [ImageMagick]: http://www.imagemagick.org/
 [Rbenv]: https://github.com/sstephenson/rbenv
@@ -52,6 +52,7 @@ Tools, Package managers, and configuration:
 [Yeoman]: http://yeoman.io/
 [Live-Server]: https://github.com/tapio/live-server
 [Begoo]: https://github.com/shariati/begoo
+[Webpack]: https://github.com/shariati/begoo
 
 
 Mobile:

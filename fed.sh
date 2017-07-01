@@ -92,6 +92,7 @@ node_modules() {
   npm install -g live-server
   npm install -g cordova
   npm install -g yo
+  npm install -g webpack
 
 }
 
