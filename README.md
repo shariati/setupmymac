@@ -39,6 +39,9 @@ Programming languages, package managers, and configuration:
 * [Node.js] and [NPM], for running apps and installing JavaScript packages
 * [Yarn] for managing JavaScript packages
 * [Rbenv] for managing versions of Ruby
+* [Yeoman] Scaffolding tool for modern webapps
+* [Live-Server] Little development server with live reload capability
+* [Begoo] Something with style in terminal
 
 
 [ImageMagick]: http://www.imagemagick.org/
@@ -46,6 +49,17 @@ Programming languages, package managers, and configuration:
 [Node.js]: http://nodejs.org/
 [NPM]: https://www.npmjs.org/
 [Yarn]: https://yarnpkg.com/en/
+[Yeoman]: http://yeoman.io/
+[Live-Server]: https://github.com/tapio/live-server
+[Begoo]: https://github.com/shariati/begoo
+
+
+Mobile:
+
+* [Cordova] Create Mobile apps with HTML, CSS & JS Target multiple platforms with one code base.
+
+[Cordova]: https://cordova.apache.org/
+
 
 Databases:
 
