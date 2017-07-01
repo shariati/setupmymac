@@ -24,20 +24,38 @@ NOCOLOR='\033[0m'
 # Check if Tool, Package is available
 
 check_homebrew() {
-  echo -e "Searching for ${BROWN}homebrew${NOCOLOR}"
+  echo -e "Checking for ${BROWN}homebrew${NOCOLOR}"
   if brew -v > /dev/null; then
-    # The homebrew is installed
-    echo Homebrew found...
+    # homebrew is installed
+    check_homebrew_update
 
   else
-    # The homebrew is not installed
+    # homebrew is not installed
     echo Couldn\'t find homebrew. Downloading the package...
 
   fi
 }
 
+check_homebrew_update() {
+  echo -e "${BLUE}Updating${NOCOLOR} ${BROWN}homebrew${NOCOLOR}..."
+  brew update
+  brew upgrade  
+}
+
 check_ruby() {
-  echo -e "checking for ruby"
+  echo -e "Checking for ${RED}ruby${NOCOLOR}"
+  if ruby -v > /dev/null; then
+    # ruby is installed
+    
+
+  else
+    # ruby is not installed
+    echo Couldn\'t find homebrew. Downloading the package...
+
+  fi
+}
+check_ruby_update() {
+
 }
 
 check_oh_my_zsh() {
@@ -45,4 +63,5 @@ check_oh_my_zsh() {
 
 }
 
-check_homebrew
+check_ruby
+#check_homebrew
