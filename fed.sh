@@ -23,20 +23,15 @@ NOCOLOR='\033[0m'
 
 # Check if Tool, Package is available
 check_cask() {
-  if brew ls --versions brew-cask-completion > /dev/null; then
-    # cask is installed then try to upgrade
-    brew upgrade brew-cask-completion
-  else
+  if ! brew ls --versions brew-cask-completion > /dev/null; then
     # cask is not installed try to install
     brew tap caskroom/cask
     brew install brew-cask-completion
   fi
+  check_java
 }
 check_java() {
-  if java -version > /dev/null; then
-    # Java is installed
-    brew upgrade brew-cask-completion
-  else
+  if ! java -version > /dev/null; then
     # Java is not installed try to install
       brew cask install java
   fi
@@ -52,6 +47,7 @@ check_homebrew() {
     # homebrew is not installed
     homebrew_install
   fi
+  check_cask
   homebrew_runtimes
   homebrew_libraries
   check_node
@@ -65,7 +61,6 @@ homebrew_install() {
 homebrew_update() {
   echo -e "${BLUE}Updating${NOCOLOR} ${BROWN}homebrew${NOCOLOR}..."
   brew update
-  check_cask
   brew upgrade
   brew cleanup
   brew cask cleanup  
@@ -102,7 +97,6 @@ homebrew_libraries() {
 # runtimes and package managers
 homebrew_runtimes() {
   brew update
-  check_java
   brew install node
   brew install yarn
   brew install watchman
