@@ -25,7 +25,7 @@ What does this script installs?
 
 macOS tools:
 
-* [Homebrew] for managing operating system libraries.
+* [Homebrew] The missing package manager for macOS for managing operating system libraries.
 
 [Homebrew]: http://brew.sh/
 
@@ -34,7 +34,7 @@ Image tools:
 
 * [ImageMagick] for cropping and resizing images
 
-Programming languages, package managers, and configuration:
+Tools, Package managers, and configuration:
 
 * [Node.js] and [NPM], for running apps and installing JavaScript packages
 * [Yarn] for managing JavaScript packages
