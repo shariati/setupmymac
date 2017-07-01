@@ -78,7 +78,7 @@ check_node() {
     brew upgrade node
   else
     # Node is not installed
-    echo -e "Installing ${LIGHT_GREEN}homebrew${NOCOLOR}..."
+    echo -e "Installing ${LIGHT_GREEN}NodeJS${NOCOLOR}..."
 
     brew install node
   fi
