@@ -1,6 +1,5 @@
 # Setup my mac for Frontend Development
-FED is a shell script to setup your mac for frontend development
-Laptop
+FED is a shell script to setup your MacOS for frontend development
 
 Requirements
 ------------
