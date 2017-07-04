@@ -78,7 +78,7 @@ Databases:
 
 Similar Tool
 ------------
-* [Laptop] Laptop is a script to set up an macOS laptop for web and mobile development.
+* [Laptop] Laptop is a script to set up a macOS laptop for web and mobile development.
 
 [Laptop]: https://github.com/thoughtbot/laptop
 
