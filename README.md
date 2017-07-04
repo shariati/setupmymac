@@ -1,10 +1,14 @@
 # Setup my mac for Frontend Development
 FED is a shell script to setup your MacOS for frontend development
 
+```
+(The following tools are what I mainly use. If you are looking for a complete set of tools I'll strongly recommend: https://github.com/thoughtbot/laptop)
+```
+
+
 Requirements
 ------------
 
-* macOS El Capitan (10.11)
 * macOS Sierra (10.12)
 
 Haven't tested on older versions
@@ -35,6 +39,7 @@ Image tools:
 
 Tools, Package managers, and configuration:
 
+* [JDK] (Java SE Development Kit) For Java Developers. Includes a complete JRE plus tools for developing, debugging, and monitoring.
 * [Node.js] and [NPM], for running apps and installing JavaScript packages
 * [Yarn] for managing JavaScript packages
 * [Rbenv] for managing versions of Ruby
@@ -43,6 +48,7 @@ Tools, Package managers, and configuration:
 * [Begoo] Something with style in terminal
 * [Webpack] Bundle your assets, scripts, images
 
+[JDK]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 [ImageMagick]: http://www.imagemagick.org/
 [Rbenv]: https://github.com/sstephenson/rbenv
 [Node.js]: http://nodejs.org/
@@ -67,6 +73,12 @@ Databases:
 
 [MongoDB]: https://www.mongodb.com/
 
+
+Similar Tool
+------------
+* [Laptop] Laptop is a script to set up an macOS laptop for web and mobile development.
+
+[Laptop]: https://github.com/thoughtbot/laptop
 
 Contributing
 ------------
