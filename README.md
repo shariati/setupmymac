@@ -2,7 +2,9 @@
 FED is a shell script to setup your MacOS for frontend development
 
 ```
-(The following tools are what I mainly use. If you are looking for a complete set of tools I'll strongly recommend: https://github.com/thoughtbot/laptop)
+(The following tools are what I mainly use. 
+If you are looking for a complete set of tools I'll strongly recommend:
+https://github.com/thoughtbot/laptop)
 ```
 
 
