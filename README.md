@@ -1,98 +1,108 @@
-# Setup my mac for Frontend Development
-FED is a shell script to setup your MacOS for frontend development
+# Setup My Mac for Development
+A comprehensive shell script collection to setup your MacOS for various development environments.
 
-```
-(The following tools are what I mainly use. 
-If you are looking for a complete set of tools I'll strongly recommend:
-https://github.com/thoughtbot/laptop)
-```
+## ⚠️ Important Disclaimer
+By using this script, you acknowledge and agree to the following:
 
+1. You have read and understood the source code of the scripts you're about to execute
+2. You are aware of all software and packages that will be installed on your system
+3. The maintainer(s) of this script assume NO RESPONSIBILITY for any damages, data loss, or system issues that may occur
+4. It is YOUR responsibility to review the code and understand its impact on your system
+5. This script is provided "AS IS", without warranty of any kind
 
-Requirements
-------------
+**Always read shell scripts before executing them on your system. This is not just a recommendation, it's a crucial security practice.**
 
-* macOS Sierra (10.12)
+## Requirements
+* macOS Sierra (10.12) or later
+* Basic understanding of shell scripts and development tools
+* Terminal access
 
-Haven't tested on older versions
+## Features
+* Modular setup scripts for different development environments
+* Interactive tool selection
+* Automated installation and configuration
+* Support for multiple development environments:
+  - Frontend Development (Node.js, React, etc.)
+  - Backend Development (Python, Databases, etc.)
+  - Data Analysis (Python, R, Jupyter, etc.)
+  - Custom setup with all available tools
 
-Install
--------
-
-Note: Please review the script after downloading and before executing.
+## Installation
 
 ```sh
-curl --remote-name https://raw.githubusercontent.com/shariati/setupmymac/master/fed.sh
-sh fed.sh
+curl --remote-name https://raw.githubusercontent.com/yourusername/setupmymac/master/setup-my-mac.sh
+chmod +x setup-my-mac.sh
+./setup-my-mac.sh
 ```
 
-What does this script installs?
----------------
+## What Gets Installed?
 
-macOS tools:
+### Frontend Development Tools
+* Node.js and npm
+* Yarn
+* Visual Studio Code
+* Web browsers (Chrome, Firefox)
+* Postman
+* Figma
+* ImageMagick
+* Git
 
-* [Homebrew] The missing package manager for macOS for managing operating system libraries.
+### Backend Development Tools
+* Python3 and pip
+* PostgreSQL
+* MySQL
+* MongoDB
+* Redis
+* Docker
+* iTerm2
+* Database management tools
+* Git
 
-[Homebrew]: http://brew.sh/
+### Data Analysis Tools
+* Python3 and pip
+* R and RStudio
+* Jupyter
+* Anaconda/Miniconda
+* Database tools
+* Tableau
+* Essential data science packages
 
+### Common Tools
+* Git
+* Visual Studio Code
+* Essential development utilities
 
-Image tools:
+## Structure
+```
+.
+├── setup-my-mac.sh          # Main script
+├── scripts/
+│   ├── frontend-setup.sh    # Frontend tools
+│   ├── backend-setup.sh     # Backend tools
+│   ├── data-analysis.sh     # Data analysis tools
+│   └── custom-setup.sh      # Custom environment
+└── utils/
+    └── helper.sh            # Common functions
+```
 
-* [ImageMagick] for cropping and resizing images
+## Contributing
+1. Fork the repository
+2. Create your feature branch
+3. Make your changes
+4. Submit a pull request
 
-Tools, Package managers, and configuration:
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-* [JDK] (Java SE Development Kit) For Java Developers. Includes a complete JRE plus tools for developing, debugging, and monitoring.
-* [Node.js] and [NPM], for running apps and installing JavaScript packages
-* [Yarn] for managing JavaScript packages
-* [Rbenv] for managing versions of Ruby
-* [Yeoman] Scaffolding tool for modern webapps
-* [Live-Server] Little development server with live reload capability
-* [Begoo] Something with style in terminal
-* [Webpack] Bundle your assets, scripts, images
+## Acknowledgments
+* [Homebrew](https://brew.sh/) - The missing package manager for macOS
+* All the amazing open-source tools included in this script
 
-[JDK]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
-[ImageMagick]: http://www.imagemagick.org/
-[Rbenv]: https://github.com/sstephenson/rbenv
-[Node.js]: http://nodejs.org/
-[NPM]: https://www.npmjs.org/
-[Yarn]: https://yarnpkg.com/en/
-[Yeoman]: http://yeoman.io/
-[Live-Server]: https://github.com/tapio/live-server
-[Begoo]: https://github.com/shariati/begoo
-[Webpack]: https://github.com/shariati/begoo
+## Support
+If you encounter any issues, please check:
+1. Your macOS version compatibility
+2. Homebrew installation status
+3. Internet connectivity
+4. System permissions
 
-
-Mobile:
-
-* [Cordova] Create Mobile apps with HTML, CSS & JS Target multiple platforms with one code base.
-
-[Cordova]: https://cordova.apache.org/
-
-
-Databases:
-
-* [MongoDB] NoSQL database program, MongoDB uses JSON-like documents with schemas
-
-[MongoDB]: https://www.mongodb.com/
-
-
-Similar Tool
-------------
-* [Laptop] Laptop is a script to set up a macOS laptop for web and mobile development.
-
-[Laptop]: https://github.com/thoughtbot/laptop
-
-Contributing
-------------
-
-Edit the `fed.sh` file.
-Document in the `README.md` file.
-
-License
--------
-
-It is free software,
-and may be redistributed under the terms specified in the [LICENSE] file.
-
-[LICENSE]: LICENSE
-
+Then create an issue in the repository with details about your problem.
