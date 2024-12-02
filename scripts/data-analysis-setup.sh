@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Source helper functions
-source ../utils/helper.sh
+source utils/helper.sh
 
 # Array to store selected tools
 selected_tools=()
