@@ -112,23 +112,37 @@ confirm_installation() {
 
 # Function to install selected tools
 install_tools() {
-    local -n selected=$1
-    
     echo -e "\n${BLUE}Installing selected tools...${NOCOLOR}\n"
 
-    for tool in "${selected[@]}"; do
+    for tool in "${selected_tools[@]}"; do
         echo -e "Installing ${GREEN}$tool${NOCOLOR}..."
         case $tool in
+            # Existing cask installations
             "visual-studio-code"|"firefox"|"google-chrome"|"figma"|"iterm2"|"pgadmin4"|"dbeaver-community"|"rstudio"|"tableau"|"microsoft-excel")
                 brew install --cask "$tool" || { echo "Failed to install $tool"; return 1; }
                 ;;
+            
+            # Node version manager (nvm)
+            "nvm")
+                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash || { echo "Failed to install $tool"; return 1; }
+                # Add NVM to path
+                echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
+                echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.zshrc
+                source ~/.zshrc
+                ;;
+            
+            # MongoDB with tap
             "mongodb-community")
                 brew tap mongodb/brew
                 brew install mongodb-community || { echo "Failed to install $tool"; return 1; }
                 ;;
+            
+            # Python packages
             "jupyter")
                 pip3 install jupyter || { echo "Failed to install $tool"; return 1; }
                 ;;
+            
+            # Conda installations
             "anaconda")
                 brew install --cask anaconda
                 echo 'export PATH="/usr/local/anaconda3/bin:$PATH"' >> ~/.zshrc
@@ -139,6 +153,47 @@ install_tools() {
                 echo 'export PATH="/usr/local/miniconda3/bin:$PATH"' >> ~/.zshrc
                 source ~/.zshrc
                 ;;
+
+            # Node and npm
+            "node")
+                brew install node || { echo "Failed to install $tool"; return 1; }
+                # Install latest npm
+                npm install -g npm@latest || { echo "Failed to update npm"; return 1; }
+                ;;
+            
+            # Yarn (requires node)
+            "yarn")
+                if ! command -v node &> /dev/null; then
+                    echo "Node.js is required for Yarn. Installing Node.js first..."
+                    brew install node || { echo "Failed to install Node.js"; return 1; }
+                fi
+                npm install -g yarn || { echo "Failed to install $tool"; return 1; }
+                ;;
+
+            # Python and pip
+            "python3")
+                brew install python3 || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "pip3")
+                curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+                python3 get-pip.py || { echo "Failed to install $tool"; return 1; }
+                rm get-pip.py
+                ;;
+
+            # R installation
+            "r")
+                brew install r || { echo "Failed to install $tool"; return 1; }
+                ;;
+
+            # Docker and Docker Compose
+            "docker")
+                brew install --cask docker || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "docker-compose")
+                brew install docker-compose || { echo "Failed to install $tool"; return 1; }
+                ;;
+
+            # Default brew installation for remaining tools
             *)
                 brew install "$tool" || { echo "Failed to install $tool"; return 1; }
                 ;;
