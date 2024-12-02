@@ -8,10 +8,10 @@ CYAN='\033[0;36m'
 BLUE='\033[0;34m'
 NOCOLOR='\033[0m'
 
-# Include utility scripts
-source utils/check-homebrew.sh
+# Source helper functions
+source utils/helper.sh
 
-# Clear screen and show header
+# Function to show header
 show_header() {
     clear
     echo -e "${CYAN}╔════════════════════════════════════╗${NOCOLOR}"
@@ -28,7 +28,6 @@ main_menu() {
     options=(
         "Frontend Development  - React, Vue, Node.js, etc."
         "Backend Development   - Python, Java, Databases, etc."
-        "Fullstack Development - Complete web development stack"
         "Data Analysis        - Python, R, Jupyter, etc."
         "Custom               - Choose your own tools"
         "Exit"
@@ -54,10 +53,9 @@ main_menu() {
     case $choice in
         1)  start_setup "Frontend Development" "./scripts/frontend-setup.sh" ;;
         2)  start_setup "Backend Development" "./scripts/backend-setup.sh" ;;
-        3)  start_setup "Fullstack Development" "./scripts/fullstack-setup.sh" ;;
-        4)  start_setup "Data Analysis" "./scripts/data-analysis-setup.sh" ;;
-        5)  start_setup "Custom" "./scripts/custom-setup.sh" ;;
-        6)  echo -e "\n${GREEN}Thank you for using Setup My Mac Wizard. Goodbye!${NOCOLOR}"
+        3)  start_setup "Data Analysis" "./scripts/data-analysis-setup.sh" ;;
+        4)  start_setup "Custom" "./scripts/custom-setup.sh" ;;
+        5)  echo -e "\n${GREEN}Thank you for using Setup My Mac Wizard. Goodbye!${NOCOLOR}"
             exit 0 ;;
     esac
 }
@@ -71,39 +69,32 @@ start_setup() {
     echo -e "${YELLOW}Initializing ${setup_name} setup...${NOCOLOR}\n"
     echo -e "${CYAN}This will install and configure the following:${NOCOLOR}"
     
-    # Display setup details (you can customize this per setup type)
+    # Display setup details
     case $setup_name in
         "Frontend Development")
             echo -e "• Node.js and npm\n• Git\n• VS Code\n• Common frontend frameworks\n• Development tools"
             ;;
-        # Add cases for other setup types
+        "Backend Development")
+            echo -e "• Python and pip\n• Databases (PostgreSQL, MongoDB, etc.)\n• Docker\n• Development tools"
+            ;;
+        "Data Analysis")
+            echo -e "• Python and R\n• Jupyter Notebook\n• Data science packages\n• Database tools"
+            ;;
+        "Custom")
+            echo -e "• Choose from all available tools\n• Mix and match as needed"
+            ;;
     esac
     
     echo
     read -p "Do you want to continue? (y/N) " confirm
     if [[ $confirm =~ ^[Yy]$ ]]; then
         echo -e "\n${YELLOW}Starting installation...${NOCOLOR}"
-        $script_path
+        bash "$script_path"
     else
         echo -e "\n${YELLOW}Setup cancelled. Returning to main menu...${NOCOLOR}"
         sleep 2
         main_menu
     fi
-}
-
-# Show loading spinner
-show_spinner() {
-    local pid=$1
-    local delay=0.1
-    local spinstr='|/-\'
-    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
-        local temp=${spinstr#?}
-        printf " [%c]  " "$spinstr"
-        local spinstr=$temp${spinstr%"$temp"}
-        sleep $delay
-        printf "\b\b\b\b\b\b"
-    done
-    printf "    \b\b\b\b"
 }
 
 # Main execution
