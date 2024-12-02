@@ -121,70 +121,6 @@ install_tools() {
             "visual-studio-code"|"firefox"|"google-chrome"|"figma"|"iterm2"|"pgadmin4"|"dbeaver-community"|"rstudio"|"tableau"|"microsoft-excel")
                 brew install --cask "$tool" || { echo "Failed to install $tool"; return 1; }
                 ;;
-            
-            # Node version manager (nvm)
-            "nvm")
-                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash || { echo "Failed to install $tool"; return 1; }
-                # Add NVM to path
-                echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
-                echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.zshrc
-                source ~/.zshrc
-                ;;
-            
-            # MongoDB with tap
-            "mongodb-community")
-                brew tap mongodb/brew
-                brew install mongodb-community || { echo "Failed to install $tool"; return 1; }
-                ;;
-            
-            # Python packages
-            "jupyter")
-                pip3 install jupyter || { echo "Failed to install $tool"; return 1; }
-                ;;
-            
-            # Conda installations
-            "anaconda")
-                brew install --cask anaconda
-                echo 'export PATH="/usr/local/anaconda3/bin:$PATH"' >> ~/.zshrc
-                source ~/.zshrc
-                ;;
-            "miniconda")
-                brew install --cask miniconda
-                echo 'export PATH="/usr/local/miniconda3/bin:$PATH"' >> ~/.zshrc
-                source ~/.zshrc
-                ;;
-
-            # Node and npm
-            "node")
-                brew install node || { echo "Failed to install $tool"; return 1; }
-                # Install latest npm
-                npm install -g npm@latest || { echo "Failed to update npm"; return 1; }
-                ;;
-            
-            # Yarn (requires node)
-            "yarn")
-                if ! command -v node &> /dev/null; then
-                    echo "Node.js is required for Yarn. Installing Node.js first..."
-                    brew install node || { echo "Failed to install Node.js"; return 1; }
-                fi
-                npm install -g yarn || { echo "Failed to install $tool"; return 1; }
-                ;;
-
-            # Python and pip
-            "python3")
-                brew install python3 || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "pip3")
-                curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-                python3 get-pip.py || { echo "Failed to install $tool"; return 1; }
-                rm get-pip.py
-                ;;
-
-            # R installation
-            "r")
-                brew install r || { echo "Failed to install $tool"; return 1; }
-                ;;
-
             # Docker and Docker Compose
             "docker")
                 brew install --cask docker || { echo "Failed to install $tool"; return 1; }
@@ -192,8 +128,27 @@ install_tools() {
             "docker-compose")
                 brew install docker-compose || { echo "Failed to install $tool"; return 1; }
                 ;;
-
             # Frontend tools
+            "node")
+                brew install node || { echo "Failed to install $tool"; return 1; }
+                # Install latest npm
+                npm install -g npm@latest || { echo "Failed to update npm"; return 1; }
+                ;;
+            # Node version manager (nvm)
+            "nvm")
+                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash || { echo "Failed to install $tool"; return 1; }
+                # Add NVM to path
+                echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
+                echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.zshrc
+                source ~/.zshrc
+                ;;             
+            "yarn")
+                if ! command -v node &> /dev/null; then
+                    echo "Node.js is required for Yarn. Installing Node.js first..."
+                    brew install node || { echo "Failed to install Node.js"; return 1; }
+                fi
+                npm install -g yarn || { echo "Failed to install $tool"; return 1; }
+                ;;
             "typescript")
                 npm install -g typescript || { echo "Failed to install $tool"; return 1; }
                 ;;
@@ -209,8 +164,20 @@ install_tools() {
             "prettier")
                 npm install -g prettier || { echo "Failed to install $tool"; return 1; }
                 ;;
-
+            "react-devtools")
+                npm install -g react-devtools || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "vue-devtools")
+                npm install -g @vue/devtools || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "lighthouse")
+                npm install -g lighthouse || { echo "Failed to install $tool"; return 1; }
+                ;;
             # Backend tools
+            "mongodb-community")
+                brew tap mongodb/brew
+                brew install mongodb-community || { echo "Failed to install $tool"; return 1; }
+                ;;
             "go")
                 brew install go || { echo "Failed to install $tool"; return 1; }
                 ;;
@@ -235,8 +202,31 @@ install_tools() {
             "terraform")
                 brew install terraform || { echo "Failed to install $tool"; return 1; }
                 ;;
-
+            "graphql")
+                npm install -g graphql || { echo "Failed to install $tool"; return 1; }
+                ;;
             # Data Analysis tools
+            "python3")
+                brew install python3 || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "pip3")
+                curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+                python3 get-pip.py || { echo "Failed to install $tool"; return 1; }
+                rm get-pip.py
+                ;;
+            "jupyter")
+                pip3 install jupyter || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "anaconda")
+                brew install --cask anaconda
+                echo 'export PATH="/usr/local/anaconda3/bin:$PATH"' >> ~/.zshrc
+                source ~/.zshrc
+                ;;
+            "miniconda")
+                brew install --cask miniconda
+                echo 'export PATH="/usr/local/miniconda3/bin:$PATH"' >> ~/.zshrc
+                source ~/.zshrc
+                ;;        
             "apache-spark")
                 brew install apache-spark || { echo "Failed to install $tool"; return 1; }
                 ;;
@@ -252,7 +242,18 @@ install_tools() {
             "kibana")
                 brew install kibana || { echo "Failed to install $tool"; return 1; }
                 ;;
-
+            "power-bi")
+                brew install --cask power-bi || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "tensorflow")
+                pip3 install tensorflow || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "pytorch")
+                pip3 install torch torchvision || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "r")
+                brew install r || { echo "Failed to install $tool"; return 1; }
+                ;;            
             # Default brew installation for remaining tools
             *)
                 brew install "$tool" || { echo "Failed to install $tool"; return 1; }
