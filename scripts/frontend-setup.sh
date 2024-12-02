@@ -37,14 +37,21 @@ check_homebrew
 # Selection process
 while true; do
     clear
-    show_menu "Frontend Development Tools Setup" tool_names selected_tools
+    show_menu "Frontend Development Tools Setup" "${tool_names[@]}"
     
     read -p "Enter a number (or press ENTER to finish): " choice
-    handle_selection "$choice" tool_names selected_tools || [ $? -eq 1 ] && break
+    
+    # If empty input, break the loop
+    if [[ -z "$choice" ]]; then
+        break
+    fi
+    
+    # Handle the selection and continue the loop
+    handle_selection "$choice" "${tool_names[@]}"
 done
 
 # Install tools
-confirm_installation selected_tools || exit 0
-install_tools selected_tools || exit 1
-post_install_setup selected_tools || exit 1
-show_completion_message selected_tools
+confirm_installation "${selected_tools[@]}" || exit 0
+install_tools || exit 1
+post_install_setup "${selected_tools[@]}" || exit 1
+show_completion_message "${selected_tools[@]}"

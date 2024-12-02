@@ -19,8 +19,8 @@ check_homebrew() {
 # Function to display menu
 show_menu() {
     local title=$1
-    local -n tools=$2
-    local -n selected=$3
+    shift
+    local tools=("$@")
     
     echo -e "${BLUE}${title}${NOCOLOR}"
     echo "Select the tools you want to install (toggle with number, ENTER when done):"
@@ -33,7 +33,7 @@ show_menu() {
             # Print category header
             echo -e "${CYAN}${tool#\# }${NOCOLOR}"
         else
-            if [[ " ${selected[@]} " =~ " ${tool} " ]]; then
+            if [[ " ${selected_tools[@]} " =~ " ${tool} " ]]; then
                 echo -e "$i) [${GREEN}X${NOCOLOR}] ${tool}"
             else
                 echo -e "$i) [ ] ${tool}"
@@ -46,8 +46,8 @@ show_menu() {
 # Function to handle tool selection
 handle_selection() {
     local choice=$1
-    local -n tools=$2
-    local -n selected=$3
+    shift
+    local tools=("$@")
     
     if [[ -z "$choice" ]]; then
         return 1
@@ -74,17 +74,17 @@ handle_selection() {
             fi
         done
         
-        if [[ " ${selected[@]} " =~ " ${tool_name} " ]]; then
+        if [[ " ${selected_tools[@]} " =~ " ${tool_name} " ]]; then
             # Create a new array without the deselected item
             local new_selected=()
-            for t in "${selected[@]}"; do
+            for t in "${selected_tools[@]}"; do
                 if [ "$t" != "$tool_name" ]; then
                     new_selected+=("$t")
                 fi
             done
-            selected=("${new_selected[@]}")
+            selected_tools=("${new_selected[@]}")
         else
-            selected+=("$tool_name")
+            selected_tools+=("$tool_name")
         fi
         return 0
     fi
@@ -93,10 +93,10 @@ handle_selection() {
 
 # Function to confirm installation
 confirm_installation() {
-    local -n selected=$1
+    local tools=("$@")
     
     echo -e "\nYou have selected the following tools for installation:"
-    for tool in "${selected[@]}"; do
+    for tool in "${tools[@]}"; do
         if [ ! -z "$tool" ]; then
             echo "- $tool"
         fi
@@ -266,9 +266,9 @@ install_tools() {
 
 # Function to perform post-installation setup
 post_install_setup() {
-    local -n selected=$1
+    local tools=("$@")
     
-    for tool in "${selected[@]}"; do
+    for tool in "${tools[@]}"; do
         case $tool in
             "python3")
                 echo "Installing essential Python data science packages..."
@@ -325,16 +325,16 @@ post_install_setup() {
 
 # Function to show completion message
 show_completion_message() {
-    local -n selected=$1
+    local tools=("$@")
     
     echo -e "\n${GREEN}All selected tools have been installed successfully!${NOCOLOR}"
     echo -e "${YELLOW}Note: Some services have been started automatically. You can manage them using 'brew services'${NOCOLOR}"
     
     # Show additional messages based on installed tools
-    if [[ " ${selected[@]} " =~ " python3 " ]]; then
+    if [[ " ${tools[@]} " =~ " python3 " ]]; then
         echo -e "${YELLOW}Additional Python packages installed: numpy, pandas, scipy, matplotlib, seaborn, scikit-learn, tensorflow, pytorch${NOCOLOR}"
     fi
-    if [[ " ${selected[@]} " =~ " r " ]]; then
+    if [[ " ${tools[@]} " =~ " r " ]]; then
         echo -e "${YELLOW}Additional R packages installed: tidyverse, ggplot2, dplyr, caret, shiny${NOCOLOR}"
     fi
 } 
