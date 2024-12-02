@@ -23,6 +23,14 @@ tool_names=(
     "dbeaver-community"
     "microsoft-excel"
     "miniconda"
+    "apache-spark"
+    "hadoop"
+    "neo4j"
+    "elasticsearch"
+    "kibana"
+    "tensorflow"
+    "pytorch"
+    "power-bi"
 )
 
 # Initialize selected_tools with all tools by default

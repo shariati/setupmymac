@@ -193,6 +193,66 @@ install_tools() {
                 brew install docker-compose || { echo "Failed to install $tool"; return 1; }
                 ;;
 
+            # Frontend tools
+            "typescript")
+                npm install -g typescript || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "sass")
+                npm install -g sass || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "webpack")
+                npm install -g webpack webpack-cli || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "eslint")
+                npm install -g eslint || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "prettier")
+                npm install -g prettier || { echo "Failed to install $tool"; return 1; }
+                ;;
+
+            # Backend tools
+            "go")
+                brew install go || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "rust")
+                curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "nginx")
+                brew install nginx || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "apache")
+                brew install httpd || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "aws-cli")
+                brew install awscli || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "azure-cli")
+                brew install azure-cli || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "kubectl")
+                brew install kubernetes-cli || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "terraform")
+                brew install terraform || { echo "Failed to install $tool"; return 1; }
+                ;;
+
+            # Data Analysis tools
+            "apache-spark")
+                brew install apache-spark || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "hadoop")
+                brew install hadoop || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "neo4j")
+                brew install neo4j || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "elasticsearch")
+                brew install elasticsearch || { echo "Failed to install $tool"; return 1; }
+                ;;
+            "kibana")
+                brew install kibana || { echo "Failed to install $tool"; return 1; }
+                ;;
+
             # Default brew installation for remaining tools
             *)
                 brew install "$tool" || { echo "Failed to install $tool"; return 1; }
@@ -236,6 +296,26 @@ post_install_setup() {
             "docker")
                 echo "Ensuring Docker is running..."
                 open -a Docker
+                ;;
+            "nginx")
+                echo "Starting Nginx service..."
+                brew services start nginx
+                ;;
+            "apache")
+                echo "Starting Apache service..."
+                brew services start httpd
+                ;;
+            "elasticsearch")
+                echo "Starting Elasticsearch service..."
+                brew services start elasticsearch
+                ;;
+            "kibana")
+                echo "Starting Kibana service..."
+                brew services start kibana
+                ;;
+            "neo4j")
+                echo "Starting Neo4j service..."
+                brew services start neo4j
                 ;;
         esac
     done

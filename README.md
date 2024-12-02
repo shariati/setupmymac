@@ -1,5 +1,5 @@
 # Setup My Mac for Development
-A comprehensive shell script collection to setup your MacOS for various development environments.
+A comprehensive shell script collection to setup your macOS for various development environments.
 
 ## ⚠️ Important Disclaimer
 By using this script, you acknowledge and agree to the following:
@@ -19,7 +19,7 @@ By using this script, you acknowledge and agree to the following:
 
 ## Features
 * Modular setup scripts for different development environments
-* Interactive tool selection
+* Interactive tool selection with toggle functionality
 * Automated installation and configuration
 * Support for multiple development environments:
   - Frontend Development (Node.js, React, etc.)
@@ -40,6 +40,7 @@ chmod +x setup-my-mac.sh
 ### Frontend Development Tools
 * Node.js and npm
 * Yarn
+* NVM (Node Version Manager)
 * Visual Studio Code
 * Web browsers (Chrome, Firefox)
 * Postman
@@ -53,9 +54,9 @@ chmod +x setup-my-mac.sh
 * MySQL
 * MongoDB
 * Redis
-* Docker
+* Docker and Docker Compose
 * iTerm2
-* Database management tools
+* Database management tools (pgAdmin4, DBeaver)
 * Git
 
 ### Data Analysis Tools
@@ -91,6 +92,73 @@ chmod +x setup-my-mac.sh
 3. Make your changes
 4. Submit a pull request
 
+
+### Adding New Software and Tools
+
+If you want to contribute by adding new software or tools to the setup scripts, follow these steps:
+
+1. **Fork the Repository**: Start by forking the repository to your GitHub account.
+
+2. **Clone the Repository**: Clone your forked repository to your local machine.
+   ```sh
+   git clone https://github.com/yourusername/setupmymac.git
+   cd setupmymac
+   ```
+
+3. **Create a New Branch**: Create a new branch for your changes.
+   ```sh
+   git checkout -b feat/add-new-tool
+   ```
+
+4. **Modify the Setup Script**:
+   - Open the appropriate setup script in the `scripts/` directory (e.g., `frontend-setup.sh`, `backend-setup.sh`, `data-analysis-setup.sh`, or `custom-setup.sh`).
+   - Add the new tool to the `tool_names` array.
+   - Ensure the tool is also added to the `selected_tools` array if you want it to be selected by default.
+
+5. **Update the Helper Script**:
+   - Open `utils/helper.sh`.
+   - Add a new case in the `install_tools()` function to handle the installation of the new tool. Use `brew install` or other appropriate commands.
+   - If necessary, add any post-installation steps in the `post_install_setup()` function.
+
+6. **Test Your Changes**: Run the modified script to ensure the new tool installs correctly and without errors.
+
+7. **Commit Your Changes**: Follow the Conventional Commits specification for your commit message.
+   ```sh
+   # For adding a new tool
+   git add .
+   git commit -m "feat: add [Tool Name] to setup scripts"
+
+   # For fixing a tool installation
+   git commit -m "fix: correct [Tool Name] installation process"
+
+   # For updating documentation
+   git commit -m "docs: update [Tool Name] installation instructions"
+
+   # For improving existing functionality
+   git commit -m "refactor: optimize [Tool Name] installation"
+   ```
+
+   Common commit types:
+   - `feat`: A new feature or tool
+   - `fix`: A bug fix
+   - `docs`: Documentation changes
+   - `style`: Code style changes (formatting, etc.)
+   - `refactor`: Code changes that neither fix bugs nor add features
+   - `test`: Adding or modifying tests
+   - `chore`: Changes to the build process or auxiliary tools
+
+8. **Push Your Changes**: Push your changes to your forked repository.
+   ```sh
+   git push origin feat/add-new-tool
+   ```
+
+9. **Submit a Pull Request**: Go to the original repository on GitHub and submit a pull request from your branch.
+
+10. **Review and Feedback**: The maintainers will review your pull request. Be prepared to make any requested changes.
+
+By following these steps and commit message conventions, you can contribute new tools to the setup scripts, helping to expand the functionality and usefulness of the project for all users.
+
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -106,3 +174,25 @@ If you encounter any issues, please check:
 4. System permissions
 
 Then create an issue in the repository with details about your problem.
+
+## Version
+**2.0.2**
+
+Latest Updates:
+- Added new frontend development tools:
+  * TypeScript, Sass, Webpack
+  * ESLint, Prettier
+  * React/Vue.js DevTools
+  * Lighthouse
+- Expanded backend tools:
+  * Go, Rust
+  * Cloud tools (AWS/Azure CLI)
+  * Infrastructure tools (Terraform, kubectl)
+  * Web servers (Nginx, Apache)
+  * GraphQL
+- Enhanced data analysis suite:
+  * Big data tools (Apache Spark, Hadoop)
+  * Additional databases (Neo4j, Elasticsearch)
+  * Visualization tools (Kibana, Power BI)
+  * Machine learning frameworks (TensorFlow, PyTorch)
+- Improved tool categorization and documentation

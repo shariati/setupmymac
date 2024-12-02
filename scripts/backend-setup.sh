@@ -22,6 +22,15 @@ tool_names=(
     "iterm2"
     "pgadmin4"
     "dbeaver-community"
+    "go"
+    "rust"
+    "nginx"
+    "apache"
+    "aws-cli"
+    "azure-cli"
+    "kubectl"
+    "terraform"
+    "graphql"
 )
 
 # Initialize selected_tools with all tools by default

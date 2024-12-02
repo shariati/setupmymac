@@ -11,6 +11,11 @@ tool_names=(
     "node"
     "yarn"
     "nvm"
+    "typescript"
+    "sass"
+    "webpack"
+    "eslint"
+    "prettier"
     "visual-studio-code"
     "firefox"
     "google-chrome"
@@ -18,6 +23,9 @@ tool_names=(
     "figma"
     "imagemagick"
     "git"
+    "react-devtools"
+    "vue-devtools"
+    "lighthouse"
 )
 
 # Initialize selected_tools with all tools by default
