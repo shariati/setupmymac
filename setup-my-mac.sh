@@ -20,17 +20,54 @@ show_header() {
     echo
 }
 
+# Function to start specific setup
+start_setup() {
+    local setup_name="$1"
+    local setup_script="$2"
+
+    # Check if script exists
+    if [ ! -f "$setup_script" ]; then
+        echo -e "${RED}Error: Setup script '$setup_script' not found.${NOCOLOR}"
+        sleep 2
+        main_menu
+        return
+    fi
+
+    # Check if script is executable
+    if [ ! -x "$setup_script" ]; then
+        echo -e "${YELLOW}Making setup script executable...${NOCOLOR}"
+        chmod +x "$setup_script"
+    fi
+
+    # Show header for selected setup
+    show_header
+    echo -e "${BLUE}Starting $setup_name setup...${NOCOLOR}\n"
+    
+    # Execute the setup script
+    "$setup_script"
+    
+    # Check if script executed successfully
+    if [ $? -eq 0 ]; then
+        echo -e "\n${GREEN}$setup_name setup completed successfully!${NOCOLOR}"
+    else
+        echo -e "\n${RED}$setup_name setup encountered some errors.${NOCOLOR}"
+    fi
+    
+    sleep 2
+    main_menu
+}
+
 # Main menu to choose setup type
 main_menu() {
     show_header
     echo -e "${BLUE}Choose your development environment:${NOCOLOR}\n"
     
     options=(
-        "Frontend Development  - React, Vue, Node.js, etc."
-        "Backend Development   - Python, Java, Databases, etc."
-        "Data Analysis        - Python, R, Jupyter, etc."
-        "Custom               - Choose your own tools"
-        "Exit"
+        "💻 Frontend Development   - React, Vue, Node.js, etc."
+        "🐍 Backend Development    - Python, Java, Databases, etc."
+        "📊 Data Analysis          - Python, R, Jupyter, etc."
+        "🔧 Custom                 - Choose your own tools"
+        "🚪 Exit"
     )
 
     # Print options with numbers
@@ -58,43 +95,6 @@ main_menu() {
         5)  echo -e "\n${GREEN}Thank you for using Setup My Mac Wizard. Goodbye!${NOCOLOR}"
             exit 0 ;;
     esac
-}
-
-# Function to handle setup initialization
-start_setup() {
-    local setup_name=$1
-    local script_path=$2
-    
-    show_header
-    echo -e "${YELLOW}Initializing ${setup_name} setup...${NOCOLOR}\n"
-    echo -e "${CYAN}This will install and configure the following:${NOCOLOR}"
-    
-    # Display setup details
-    case $setup_name in
-        "Frontend Development")
-            echo -e "• Node.js and npm\n• Git\n• VS Code\n• Common frontend frameworks\n• Development tools"
-            ;;
-        "Backend Development")
-            echo -e "• Python and pip\n• Databases (PostgreSQL, MongoDB, etc.)\n• Docker\n• Development tools"
-            ;;
-        "Data Analysis")
-            echo -e "• Python and R\n• Jupyter Notebook\n• Data science packages\n• Database tools"
-            ;;
-        "Custom")
-            echo -e "• Choose from all available tools\n• Mix and match as needed"
-            ;;
-    esac
-    
-    echo
-    read -p "Do you want to continue? (y/N) " confirm
-    if [[ $confirm =~ ^[Yy]$ ]]; then
-        echo -e "\n${YELLOW}Starting installation...${NOCOLOR}"
-        bash "$script_path"
-    else
-        echo -e "\n${YELLOW}Setup cancelled. Returning to main menu...${NOCOLOR}"
-        sleep 2
-        main_menu
-    fi
 }
 
 # Main execution
