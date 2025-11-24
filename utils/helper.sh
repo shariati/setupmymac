@@ -8,6 +8,27 @@ CYAN='\033[0;36m'
 BLUE='\033[0;34m'
 NOCOLOR='\033[0m'
 
+# Logging function
+log_message() {
+    local message="$1"
+    echo -e "$message"
+    # Strip color codes for log file
+    echo -e "$message" | sed 's/\x1b\[[0-9;]*m//g' >> "${LOG_FILE:-/dev/null}"
+}
+
+# Command execution wrapper for Dry Run
+run_install_cmd() {
+    local cmd="$*"
+    if [ "${DRY_RUN:-false}" = true ]; then
+        log_message "${YELLOW}[DRY RUN] Would execute: $cmd${NOCOLOR}"
+        return 0
+    else
+        log_message "Executing: $cmd"
+        eval "$cmd"
+        return $?
+    fi
+}
+
 # Function to check and install Homebrew
 check_homebrew() {
     if ! command -v brew &> /dev/null; then
@@ -114,166 +135,178 @@ confirm_installation() {
 # Function to install a single tool
 install_single_tool() {
     local tool=$1
-    echo -e "Installing ${GREEN}$tool${NOCOLOR}..."
+    log_message "Installing ${GREEN}$tool${NOCOLOR}..."
     
     case $tool in
         # Existing cask installations
         "visual-studio-code"|"firefox"|"google-chrome"|"figma"|"iterm2"|"pgadmin4"|"dbeaver-community"|"rstudio"|"tableau"|"microsoft-excel")
-            brew install --cask "$tool" || return 1
+            run_install_cmd "brew install --cask $tool" || return 1
             ;;
         # Docker and Docker Compose
         "docker")
-            brew install --cask docker || return 1
+            run_install_cmd "brew install --cask docker" || return 1
             ;;
         "docker-compose")
-            brew install docker-compose || return 1
+            run_install_cmd "brew install docker-compose" || return 1
             ;;
         # Frontend tools
         "node")
-            brew install node || return 1
+            run_install_cmd "brew install node" || return 1
             # Install latest npm
-            npm install -g npm@latest || return 1
+            run_install_cmd "npm install -g npm@latest" || return 1
             ;;
         # Node version manager (nvm)
         "nvm")
             # SECURITY NOTE: Piping curl to bash is risky. Ensure the URL is trusted.
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash || { echo "Failed to install $tool"; return 1; }
+            run_install_cmd "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash" || { log_message "Failed to install $tool"; return 1; }
             # Add NVM to path
-            echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
-            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.zshrc
-            source ~/.zshrc
+            if [ "${DRY_RUN:-false}" = false ]; then
+                echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
+                echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.zshrc
+                source ~/.zshrc
+            else
+                 log_message "${YELLOW}[DRY RUN] Would add NVM to .zshrc${NOCOLOR}"
+            fi
             ;;             
         "yarn")
-            if ! command -v node &> /dev/null; then
-                echo "Node.js is required for Yarn. Installing Node.js first..."
-                brew install node || return 1
+            if ! command -v node &> /dev/null && [ "${DRY_RUN:-false}" = false ]; then
+                log_message "Node.js is required for Yarn. Installing Node.js first..."
+                run_install_cmd "brew install node" || return 1
             fi
-            npm install -g yarn || return 1
+            run_install_cmd "npm install -g yarn" || return 1
             ;;
         "typescript")
-            npm install -g typescript || return 1
+            run_install_cmd "npm install -g typescript" || return 1
             ;;
         "sass")
-            npm install -g sass || return 1
+            run_install_cmd "npm install -g sass" || return 1
             ;;
         "webpack")
-            npm install -g webpack webpack-cli || return 1
+            run_install_cmd "npm install -g webpack webpack-cli" || return 1
             ;;
         "eslint")
-            npm install -g eslint || return 1
+            run_install_cmd "npm install -g eslint" || return 1
             ;;
         "prettier")
-            npm install -g prettier || return 1
+            run_install_cmd "npm install -g prettier" || return 1
             ;;
         "react-devtools")
-            npm install -g react-devtools || return 1
+            run_install_cmd "npm install -g react-devtools" || return 1
             ;;
         "vue-devtools")
-            npm install -g @vue/devtools || return 1
+            run_install_cmd "npm install -g @vue/devtools" || return 1
             ;;
         "lighthouse")
-            npm install -g lighthouse || return 1
+            run_install_cmd "npm install -g lighthouse" || return 1
             ;;
         # Backend tools
         "mongodb-community")
-            brew tap mongodb/brew
-            brew install mongodb-community || return 1
+            run_install_cmd "brew tap mongodb/brew"
+            run_install_cmd "brew install mongodb-community" || return 1
             ;;
         "go")
-            brew install go || return 1
+            run_install_cmd "brew install go" || return 1
             ;;
         "rust")
             # SECURITY NOTE: Piping curl to sh is risky. Ensure the URL is trusted.
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh || { echo "Failed to install $tool"; return 1; }
+            run_install_cmd "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh" || { log_message "Failed to install $tool"; return 1; }
             ;;
         "nginx")
-            brew install nginx || return 1
+            run_install_cmd "brew install nginx" || return 1
             ;;
         "apache")
-            brew install httpd || return 1
+            run_install_cmd "brew install httpd" || return 1
             ;;
         "aws-cli")
-            brew install awscli || return 1
+            run_install_cmd "brew install awscli" || return 1
             ;;
         "azure-cli")
-            brew install azure-cli || return 1
+            run_install_cmd "brew install azure-cli" || return 1
             ;;
         "kubectl")
-            brew install kubernetes-cli || return 1
+            run_install_cmd "brew install kubernetes-cli" || return 1
             ;;
         "terraform")
-            brew install terraform || return 1
+            run_install_cmd "brew install terraform" || return 1
             ;;
         "graphql")
-            npm install -g graphql || return 1
+            run_install_cmd "npm install -g graphql" || return 1
             ;;
         # Data Analysis tools
         "python3")
-            brew install python3 || return 1
+            run_install_cmd "brew install python3" || return 1
             ;;
         "pip3")
-            curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-            python3 get-pip.py || return 1
-            rm get-pip.py
+            run_install_cmd "curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py"
+            run_install_cmd "python3 get-pip.py" || return 1
+            run_install_cmd "rm get-pip.py"
             ;;
         "jupyter")
-            pip3 install jupyter || return 1
+            run_install_cmd "pip3 install jupyter" || return 1
             ;;
         "anaconda")
-            brew install --cask anaconda
-            echo 'export PATH="/usr/local/anaconda3/bin:$PATH"' >> ~/.zshrc
-            source ~/.zshrc
+            run_install_cmd "brew install --cask anaconda"
+            if [ "${DRY_RUN:-false}" = false ]; then
+                echo 'export PATH="/usr/local/anaconda3/bin:$PATH"' >> ~/.zshrc
+                source ~/.zshrc
+            else
+                log_message "${YELLOW}[DRY RUN] Would add Anaconda to .zshrc${NOCOLOR}"
+            fi
             ;;
         "miniconda")
-            brew install --cask miniconda
-            echo 'export PATH="/usr/local/miniconda3/bin:$PATH"' >> ~/.zshrc
-            source ~/.zshrc
+            run_install_cmd "brew install --cask miniconda"
+            if [ "${DRY_RUN:-false}" = false ]; then
+                echo 'export PATH="/usr/local/miniconda3/bin:$PATH"' >> ~/.zshrc
+                source ~/.zshrc
+            else
+                log_message "${YELLOW}[DRY RUN] Would add Miniconda to .zshrc${NOCOLOR}"
+            fi
             ;;        
         "apache-spark")
-            brew install apache-spark || return 1
+            run_install_cmd "brew install apache-spark" || return 1
             ;;
         "hadoop")
-            brew install hadoop || return 1
+            run_install_cmd "brew install hadoop" || return 1
             ;;
         "neo4j")
-            brew install neo4j || return 1
+            run_install_cmd "brew install neo4j" || return 1
             ;;
         "elasticsearch")
-            brew install elasticsearch || return 1
+            run_install_cmd "brew install elasticsearch" || return 1
             ;;
         "kibana")
-            brew install kibana || return 1
+            run_install_cmd "brew install kibana" || return 1
             ;;
         "power-bi")
-            brew install --cask power-bi || return 1
+            run_install_cmd "brew install --cask power-bi" || return 1
             ;;
         "tensorflow")
-            pip3 install tensorflow || return 1
+            run_install_cmd "pip3 install tensorflow" || return 1
             ;;
         "pytorch")
-            pip3 install torch torchvision || return 1
+            run_install_cmd "pip3 install torch torchvision" || return 1
             ;;
         "r")
-            brew install r || return 1
+            run_install_cmd "brew install r" || return 1
             ;;            
         # Default brew installation for remaining tools
         *)
-            brew install "$tool" || return 1
+            run_install_cmd "brew install $tool" || return 1
             ;;
     esac
     
-    echo -e "${GREEN}$tool installed successfully!${NOCOLOR}"
+    log_message "${GREEN}$tool installed successfully!${NOCOLOR}"
     return 0
 }
 
 # Function to install selected tools
 install_tools() {
-    echo -e "\n${BLUE}Installing selected tools...${NOCOLOR}\n"
+    log_message "\n${BLUE}Installing selected tools...${NOCOLOR}\n"
 
     for tool in "${selected_tools[@]}"; do
         install_single_tool "$tool"
         if [ $? -ne 0 ]; then
-            echo -e "${RED}Failed to install $tool${NOCOLOR}"
+            log_message "${RED}Failed to install $tool${NOCOLOR}"
         fi
     done
     return 0
@@ -286,52 +319,52 @@ post_install_setup() {
     for tool in "${tools[@]}"; do
         case $tool in
             "python3")
-                echo "Installing essential Python data science packages..."
-                pip3 install numpy pandas scipy matplotlib seaborn scikit-learn tensorflow pytorch || { echo "Failed to install Python packages"; return 1; }
+                log_message "Installing essential Python data science packages..."
+                run_install_cmd "pip3 install numpy pandas scipy matplotlib seaborn scikit-learn tensorflow pytorch" || { log_message "Failed to install Python packages"; return 1; }
                 ;;
             "r")
-                echo "Installing essential R packages..."
-                Rscript -e 'install.packages(c("tidyverse", "ggplot2", "dplyr", "caret", "shiny"), repos="https://cran.rstudio.com/")' || { echo "Failed to install R packages"; return 1; }
+                log_message "Installing essential R packages..."
+                run_install_cmd "Rscript -e 'install.packages(c(\"tidyverse\", \"ggplot2\", \"dplyr\", \"caret\", \"shiny\"), repos=\"https://cran.rstudio.com/\")'" || { log_message "Failed to install R packages"; return 1; }
                 ;;
             "postgresql")
-                echo "Starting PostgreSQL service..."
-                brew services start postgresql
+                log_message "Starting PostgreSQL service..."
+                run_install_cmd "brew services start postgresql"
                 ;;
             "mongodb-community")
-                echo "Starting MongoDB service..."
-                brew services start mongodb-community
+                log_message "Starting MongoDB service..."
+                run_install_cmd "brew services start mongodb-community"
                 ;;
             "mysql")
-                echo "Starting MySQL service..."
-                brew services start mysql
+                log_message "Starting MySQL service..."
+                run_install_cmd "brew services start mysql"
                 ;;
             "redis")
-                echo "Starting Redis service..."
-                brew services start redis
+                log_message "Starting Redis service..."
+                run_install_cmd "brew services start redis"
                 ;;
             "docker")
-                echo "Ensuring Docker is running..."
-                open -a Docker
+                log_message "Ensuring Docker is running..."
+                run_install_cmd "open -a Docker"
                 ;;
             "nginx")
-                echo "Starting Nginx service..."
-                brew services start nginx
+                log_message "Starting Nginx service..."
+                run_install_cmd "brew services start nginx"
                 ;;
             "apache")
-                echo "Starting Apache service..."
-                brew services start httpd
+                log_message "Starting Apache service..."
+                run_install_cmd "brew services start httpd"
                 ;;
             "elasticsearch")
-                echo "Starting Elasticsearch service..."
-                brew services start elasticsearch
+                log_message "Starting Elasticsearch service..."
+                run_install_cmd "brew services start elasticsearch"
                 ;;
             "kibana")
-                echo "Starting Kibana service..."
-                brew services start kibana
+                log_message "Starting Kibana service..."
+                run_install_cmd "brew services start kibana"
                 ;;
             "neo4j")
-                echo "Starting Neo4j service..."
-                brew services start neo4j
+                log_message "Starting Neo4j service..."
+                run_install_cmd "brew services start neo4j"
                 ;;
         esac
     done
@@ -342,15 +375,15 @@ post_install_setup() {
 show_completion_message() {
     local tools=("$@")
     
-    echo -e "\n${GREEN}All selected tools have been installed successfully!${NOCOLOR}"
-    echo -e "${YELLOW}Note: Some services have been started automatically. You can manage them using 'brew services'${NOCOLOR}"
+    log_message "\n${GREEN}All selected tools have been installed successfully!${NOCOLOR}"
+    log_message "${YELLOW}Note: Some services have been started automatically. You can manage them using 'brew services'${NOCOLOR}"
     
     # Show additional messages based on installed tools
     if [[ " ${tools[@]} " =~ " python3 " ]]; then
-        echo -e "${YELLOW}Additional Python packages installed: numpy, pandas, scipy, matplotlib, seaborn, scikit-learn, tensorflow, pytorch${NOCOLOR}"
+        log_message "${YELLOW}Additional Python packages installed: numpy, pandas, scipy, matplotlib, seaborn, scikit-learn, tensorflow, pytorch${NOCOLOR}"
     fi
     if [[ " ${tools[@]} " =~ " r " ]]; then
-        echo -e "${YELLOW}Additional R packages installed: tidyverse, ggplot2, dplyr, caret, shiny${NOCOLOR}"
+        log_message "${YELLOW}Additional R packages installed: tidyverse, ggplot2, dplyr, caret, shiny${NOCOLOR}"
     fi
 }
 

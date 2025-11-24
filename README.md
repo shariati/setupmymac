@@ -21,6 +21,8 @@ By using this script, you acknowledge and agree to the following:
 * Modular setup scripts for different development environments
 * Interactive tool selection with toggle functionality
 * Automated installation and configuration
+* **Dry Run Mode**: Preview commands without executing them (`--dry-run`)
+* **Logging**: detailed installation logs saved to `setup_log.txt`
 * Support for multiple development environments:
   - Frontend Development (Node.js, React, etc.)
   - Backend Development (Python, Databases, etc.)
@@ -34,6 +36,12 @@ By using this script, you acknowledge and agree to the following:
 curl --remote-name https://raw.githubusercontent.com/yourusername/setupmymac/master/setup-my-mac.sh
 chmod +x setup-my-mac.sh
 ./setup-my-mac.sh
+```
+
+### Dry Run (Safe Mode)
+To see what commands will be executed without actually installing anything:
+```sh
+./setup-my-mac.sh --dry-run
 ```
 
 ## What Gets Installed?
@@ -163,9 +171,25 @@ By following these steps and commit message conventions, you can contribute new 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+Please also read the [Legal Note & Disclaimer](LEGAL_NOTE.md) for important information regarding warranties, liability, and third-party software licenses.
+
 ## Acknowledgments
 * [Homebrew](https://brew.sh/) - The missing package manager for macOS
 * All the amazing open-source tools included in this script
+
+## Credits
+This script was originally developed by [Amin](https://github.com/shariati) and is maintained by the open source community.
+
+## Open Source
+This is an open source project! We believe in the power of community collaboration.
+- **Source Code**: The code is available on GitHub.
+- **Contributions**: We welcome pull requests for new features, bug fixes, and improvements.
+- **License**: MIT License.
+
+## Critical Disclaimer
+**By running these scripts, you confirm that you have read and understood the code. You acknowledge that you are fully aware of what the script does and take full responsibility for any changes made to your system. NEVER execute a script without reading the commands it executes. The expectation is that you know and fully understand the code before execution.**
+
+Feel free to fork, modify, and share!
 
 ## Support
 If you encounter any issues, please check:

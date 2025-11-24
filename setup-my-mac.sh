@@ -1,4 +1,11 @@
 #!/bin/bash
+#
+# Setup My Mac
+# Original Developer: Amin
+# Open Source Project - Contributions Welcome!
+# License: MIT
+#
+
 set -u # Exit on unbound variables
 
 # Colors for console output
@@ -9,6 +16,24 @@ CYAN='\033[0;36m'
 BLUE='\033[0;34m'
 NOCOLOR='\033[0m'
 
+# Global configuration
+export DRY_RUN=false
+export LOG_FILE="$(pwd)/setup_log.txt"
+
+# Check for flags
+for arg in "$@"; do
+    case $arg in
+        --dry-run)
+            export DRY_RUN=true
+            ;;
+    esac
+done
+
+# Initialize log
+if [ "$DRY_RUN" = false ]; then
+    echo "Setup My Mac Log - $(date)" > "$LOG_FILE"
+fi
+
 # Source helper functions
 source utils/helper.sh
 source utils/updater.sh
@@ -17,8 +42,11 @@ source utils/updater.sh
 show_header() {
     clear
     echo -e "${CYAN}╔════════════════════════════════════╗${NOCOLOR}"
-    echo -e "${CYAN}║        Setup My Mac Wizard         ║${NOCOLOR}"
+    echo -e "${CYAN}║        Setup My Mac Assistant      ║${NOCOLOR}"
     echo -e "${CYAN}╚════════════════════════════════════╝${NOCOLOR}"
+    if [ "$DRY_RUN" = true ]; then
+        echo -e "${YELLOW}           [DRY RUN MODE]           ${NOCOLOR}"
+    fi
     echo
 }
 
