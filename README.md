@@ -26,6 +26,7 @@ By using this script, you acknowledge and agree to the following:
   - Backend Development (Python, Databases, etc.)
   - Data Analysis (Python, R, Jupyter, etc.)
   - Custom setup with all available tools
+  - Update Existing Tools (Homebrew, npm, pip, etc.)
 
 ## Installation
 

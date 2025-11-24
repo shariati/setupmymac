@@ -63,11 +63,12 @@ main_menu() {
     echo -e "${BLUE}Choose your development environment:${NOCOLOR}\n"
     
     options=(
-        "💻 Frontend Development   - React, Vue, Node.js, etc."
-        "🐍 Backend Development    - Python, Java, Databases, etc."
-        "📊 Data Analysis          - Python, R, Jupyter, etc."
-        "🔧 Custom                 - Choose your own tools"
-        "🚪 Exit"
+        "Frontend Development   - React, Vue, Node.js, etc."
+        "Backend Development    - Python, Java, Databases, etc."
+        "Data Analysis          - Python, R, Jupyter, etc."
+        "Custom                 - Choose your own tools"
+        "Update Existing Tools  - Update system and packages"
+        "Exit"
     )
 
     # Print options with numbers
@@ -92,7 +93,9 @@ main_menu() {
         2)  start_setup "Backend Development" "./scripts/backend-setup.sh" ;;
         3)  start_setup "Data Analysis" "./scripts/data-analysis-setup.sh" ;;
         4)  start_setup "Custom" "./scripts/custom-setup.sh" ;;
-        5)  echo -e "\n${GREEN}Thank you for using Setup My Mac Wizard. Goodbye!${NOCOLOR}"
+        5)  update_tools 
+            main_menu ;;
+        6)  echo -e "\n${GREEN}Thank you for using Setup My Mac Wizard. Goodbye!${NOCOLOR}"
             exit 0 ;;
     esac
 }
