@@ -13,7 +13,6 @@ check_homebrew() {
     if ! command -v brew &> /dev/null; then
         echo "Homebrew is not installed. Installing Homebrew..."
         echo "Homebrew is not installed. Installing Homebrew..."
-        # SECURITY NOTE: Piping curl to bash is risky. Ensure the URL is trusted.
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || { echo "Failed to install Homebrew"; exit 1; }
     fi
 }
