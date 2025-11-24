@@ -201,23 +201,17 @@ If you encounter any issues, please check:
 Then create an issue in the repository with details about your problem.
 
 ## Version
-**2.0.2**
+**2.1.0**
 
 Latest Updates:
-- Added new frontend development tools:
-  * TypeScript, Sass, Webpack
-  * ESLint, Prettier
-  * React/Vue.js DevTools
-  * Lighthouse
-- Expanded backend tools:
-  * Go, Rust
-  * Cloud tools (AWS/Azure CLI)
-  * Infrastructure tools (Terraform, kubectl)
-  * Web servers (Nginx, Apache)
-  * GraphQL
-- Enhanced data analysis suite:
-  * Big data tools (Apache Spark, Hadoop)
-  * Additional databases (Neo4j, Elasticsearch)
-  * Visualization tools (Kibana, Power BI)
-  * Machine learning frameworks (TensorFlow, PyTorch)
-- Improved tool categorization and documentation
+- **New Features**:
+  * Added "Update Existing Tools" functionality to keep installed tools up-to-date.
+- **Security**:
+  * Enhanced script security with strict variable checking and improved input validation.
+  * Added `LEGAL_NOTE.md` and critical disclaimers.
+- **Documentation**:
+  * Added "Credits" and "Open Source" sections.
+  * Updated contribution guidelines.
+- **Improvements**:
+  * Refactored menu system for better user experience.
+  * Improved script robustness and error reporting.
