@@ -12,13 +12,15 @@ NOCOLOR='\033[0m'
 check_homebrew() {
     if ! command -v brew &> /dev/null; then
         echo "Homebrew is not installed. Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        echo "Homebrew is not installed. Installing Homebrew..."
+        # SECURITY NOTE: Piping curl to bash is risky. Ensure the URL is trusted.
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || { echo "Failed to install Homebrew"; exit 1; }
     fi
 }
 
 # Function to display menu
 show_menu() {
-    local title=$1
+    local title="$1"
     shift
     local tools=("$@")
     
@@ -29,7 +31,7 @@ show_menu() {
     
     local i=1
     for tool in "${tools[@]}"; do
-        if [[ $tool == \#* ]]; then
+        if [[ "$tool" == \#* ]]; then
             # Print category header
             echo -e "${CYAN}${tool#\# }${NOCOLOR}"
         else
@@ -45,7 +47,7 @@ show_menu() {
 
 # Function to handle tool selection
 handle_selection() {
-    local choice=$1
+    local choice="$1"
     shift
     local tools=("$@")
     
@@ -56,7 +58,7 @@ handle_selection() {
     # Count non-header items
     local valid_items=0
     for tool in "${tools[@]}"; do
-        if [[ ! $tool == \#* ]]; then
+        if [[ ! "$tool" == \#* ]]; then
             ((valid_items++))
         fi
     done
@@ -65,7 +67,7 @@ handle_selection() {
         # Find the actual tool name by skipping headers
         local actual_index=0
         for tool in "${tools[@]}"; do
-            if [[ ! $tool == \#* ]]; then
+            if [[ ! "$tool" == \#* ]]; then
                 ((actual_index++))
                 if [ "$actual_index" -eq "$choice" ]; then
                     local tool_name="$tool"
@@ -110,156 +112,170 @@ confirm_installation() {
     return 0
 }
 
+# Function to install a single tool
+install_single_tool() {
+    local tool=$1
+    echo -e "Installing ${GREEN}$tool${NOCOLOR}..."
+    
+    case $tool in
+        # Existing cask installations
+        "visual-studio-code"|"firefox"|"google-chrome"|"figma"|"iterm2"|"pgadmin4"|"dbeaver-community"|"rstudio"|"tableau"|"microsoft-excel")
+            brew install --cask "$tool" || return 1
+            ;;
+        # Docker and Docker Compose
+        "docker")
+            brew install --cask docker || return 1
+            ;;
+        "docker-compose")
+            brew install docker-compose || return 1
+            ;;
+        # Frontend tools
+        "node")
+            brew install node || return 1
+            # Install latest npm
+            npm install -g npm@latest || return 1
+            ;;
+        # Node version manager (nvm)
+        "nvm")
+            # SECURITY NOTE: Piping curl to bash is risky. Ensure the URL is trusted.
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash || { echo "Failed to install $tool"; return 1; }
+            # Add NVM to path
+            echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.zshrc
+            source ~/.zshrc
+            ;;             
+        "yarn")
+            if ! command -v node &> /dev/null; then
+                echo "Node.js is required for Yarn. Installing Node.js first..."
+                brew install node || return 1
+            fi
+            npm install -g yarn || return 1
+            ;;
+        "typescript")
+            npm install -g typescript || return 1
+            ;;
+        "sass")
+            npm install -g sass || return 1
+            ;;
+        "webpack")
+            npm install -g webpack webpack-cli || return 1
+            ;;
+        "eslint")
+            npm install -g eslint || return 1
+            ;;
+        "prettier")
+            npm install -g prettier || return 1
+            ;;
+        "react-devtools")
+            npm install -g react-devtools || return 1
+            ;;
+        "vue-devtools")
+            npm install -g @vue/devtools || return 1
+            ;;
+        "lighthouse")
+            npm install -g lighthouse || return 1
+            ;;
+        # Backend tools
+        "mongodb-community")
+            brew tap mongodb/brew
+            brew install mongodb-community || return 1
+            ;;
+        "go")
+            brew install go || return 1
+            ;;
+        "rust")
+            # SECURITY NOTE: Piping curl to sh is risky. Ensure the URL is trusted.
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh || { echo "Failed to install $tool"; return 1; }
+            ;;
+        "nginx")
+            brew install nginx || return 1
+            ;;
+        "apache")
+            brew install httpd || return 1
+            ;;
+        "aws-cli")
+            brew install awscli || return 1
+            ;;
+        "azure-cli")
+            brew install azure-cli || return 1
+            ;;
+        "kubectl")
+            brew install kubernetes-cli || return 1
+            ;;
+        "terraform")
+            brew install terraform || return 1
+            ;;
+        "graphql")
+            npm install -g graphql || return 1
+            ;;
+        # Data Analysis tools
+        "python3")
+            brew install python3 || return 1
+            ;;
+        "pip3")
+            curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+            python3 get-pip.py || return 1
+            rm get-pip.py
+            ;;
+        "jupyter")
+            pip3 install jupyter || return 1
+            ;;
+        "anaconda")
+            brew install --cask anaconda
+            echo 'export PATH="/usr/local/anaconda3/bin:$PATH"' >> ~/.zshrc
+            source ~/.zshrc
+            ;;
+        "miniconda")
+            brew install --cask miniconda
+            echo 'export PATH="/usr/local/miniconda3/bin:$PATH"' >> ~/.zshrc
+            source ~/.zshrc
+            ;;        
+        "apache-spark")
+            brew install apache-spark || return 1
+            ;;
+        "hadoop")
+            brew install hadoop || return 1
+            ;;
+        "neo4j")
+            brew install neo4j || return 1
+            ;;
+        "elasticsearch")
+            brew install elasticsearch || return 1
+            ;;
+        "kibana")
+            brew install kibana || return 1
+            ;;
+        "power-bi")
+            brew install --cask power-bi || return 1
+            ;;
+        "tensorflow")
+            pip3 install tensorflow || return 1
+            ;;
+        "pytorch")
+            pip3 install torch torchvision || return 1
+            ;;
+        "r")
+            brew install r || return 1
+            ;;            
+        # Default brew installation for remaining tools
+        *)
+            brew install "$tool" || return 1
+            ;;
+    esac
+    
+    echo -e "${GREEN}$tool installed successfully!${NOCOLOR}"
+    return 0
+}
+
 # Function to install selected tools
 install_tools() {
     echo -e "\n${BLUE}Installing selected tools...${NOCOLOR}\n"
 
     for tool in "${selected_tools[@]}"; do
-        echo -e "Installing ${GREEN}$tool${NOCOLOR}..."
-        case $tool in
-            # Existing cask installations
-            "visual-studio-code"|"firefox"|"google-chrome"|"figma"|"iterm2"|"pgadmin4"|"dbeaver-community"|"rstudio"|"tableau"|"microsoft-excel")
-                brew install --cask "$tool" || { echo "Failed to install $tool"; return 1; }
-                ;;
-            # Docker and Docker Compose
-            "docker")
-                brew install --cask docker || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "docker-compose")
-                brew install docker-compose || { echo "Failed to install $tool"; return 1; }
-                ;;
-            # Frontend tools
-            "node")
-                brew install node || { echo "Failed to install $tool"; return 1; }
-                # Install latest npm
-                npm install -g npm@latest || { echo "Failed to update npm"; return 1; }
-                ;;
-            # Node version manager (nvm)
-            "nvm")
-                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash || { echo "Failed to install $tool"; return 1; }
-                # Add NVM to path
-                echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
-                echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.zshrc
-                source ~/.zshrc
-                ;;             
-            "yarn")
-                if ! command -v node &> /dev/null; then
-                    echo "Node.js is required for Yarn. Installing Node.js first..."
-                    brew install node || { echo "Failed to install Node.js"; return 1; }
-                fi
-                npm install -g yarn || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "typescript")
-                npm install -g typescript || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "sass")
-                npm install -g sass || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "webpack")
-                npm install -g webpack webpack-cli || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "eslint")
-                npm install -g eslint || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "prettier")
-                npm install -g prettier || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "react-devtools")
-                npm install -g react-devtools || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "vue-devtools")
-                npm install -g @vue/devtools || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "lighthouse")
-                npm install -g lighthouse || { echo "Failed to install $tool"; return 1; }
-                ;;
-            # Backend tools
-            "mongodb-community")
-                brew tap mongodb/brew
-                brew install mongodb-community || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "go")
-                brew install go || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "rust")
-                curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "nginx")
-                brew install nginx || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "apache")
-                brew install httpd || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "aws-cli")
-                brew install awscli || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "azure-cli")
-                brew install azure-cli || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "kubectl")
-                brew install kubernetes-cli || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "terraform")
-                brew install terraform || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "graphql")
-                npm install -g graphql || { echo "Failed to install $tool"; return 1; }
-                ;;
-            # Data Analysis tools
-            "python3")
-                brew install python3 || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "pip3")
-                curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-                python3 get-pip.py || { echo "Failed to install $tool"; return 1; }
-                rm get-pip.py
-                ;;
-            "jupyter")
-                pip3 install jupyter || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "anaconda")
-                brew install --cask anaconda
-                echo 'export PATH="/usr/local/anaconda3/bin:$PATH"' >> ~/.zshrc
-                source ~/.zshrc
-                ;;
-            "miniconda")
-                brew install --cask miniconda
-                echo 'export PATH="/usr/local/miniconda3/bin:$PATH"' >> ~/.zshrc
-                source ~/.zshrc
-                ;;        
-            "apache-spark")
-                brew install apache-spark || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "hadoop")
-                brew install hadoop || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "neo4j")
-                brew install neo4j || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "elasticsearch")
-                brew install elasticsearch || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "kibana")
-                brew install kibana || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "power-bi")
-                brew install --cask power-bi || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "tensorflow")
-                pip3 install tensorflow || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "pytorch")
-                pip3 install torch torchvision || { echo "Failed to install $tool"; return 1; }
-                ;;
-            "r")
-                brew install r || { echo "Failed to install $tool"; return 1; }
-                ;;            
-            # Default brew installation for remaining tools
-            *)
-                brew install "$tool" || { echo "Failed to install $tool"; return 1; }
-                ;;
-        esac
-        echo -e "${GREEN}$tool installed successfully!${NOCOLOR}"
+        install_single_tool "$tool"
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}Failed to install $tool${NOCOLOR}"
+        fi
     done
     return 0
 }

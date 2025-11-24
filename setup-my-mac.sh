@@ -1,4 +1,5 @@
 #!/bin/bash
+set -u # Exit on unbound variables
 
 # Colors for console output
 GREEN='\033[0;32m'
@@ -10,6 +11,7 @@ NOCOLOR='\033[0m'
 
 # Source helper functions
 source utils/helper.sh
+source utils/updater.sh
 
 # Function to show header
 show_header() {
@@ -80,7 +82,7 @@ main_menu() {
     read -p "Enter your choice (1-${#options[@]}): " choice
 
     # Validate input
-    if ! [[ "$choice" =~ ^[0-9]+$ ]] || [ "$choice" -lt 1 ] || [ "$choice" -gt ${#options[@]} ]; then
+    if ! [[ "$choice" =~ ^[0-9]+$ ]] || [ "$choice" -lt 1 ] || [ "$choice" -gt "${#options[@]}" ]; then
         echo -e "\n${RED}Invalid input. Please enter a number between 1 and ${#options[@]}.${NOCOLOR}"
         sleep 2
         main_menu
